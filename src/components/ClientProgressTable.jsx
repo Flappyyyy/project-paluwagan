@@ -49,7 +49,16 @@ const ClientProgressTable = ({ clients, onSelectClient }) => {
                                 return (
                                     <tr key={c.id} className={`hover:bg-pink-50/80 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-pink-50/40'}`}>
                                         <td className="px-6 py-4 whitespace-nowrap font-medium text-rose-900">{c.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-rose-600">{c.items}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-rose-600">{c.items}</span>
+                                                {c.isItemReceived && (
+                                                    <span className="text-xs bg-emerald-100 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200">
+                                                        Received
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap">{c.startMonth || c.month}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-pink-500">{targetMonths}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center font-semibold text-rose-500">

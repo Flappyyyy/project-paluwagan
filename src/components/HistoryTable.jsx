@@ -63,7 +63,16 @@ const HistoryTable = ({ clients, selectedIds = [], onSelectRow, onSelectAll }) =
                                             />
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap font-medium text-emerald-900">{c.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-emerald-700">{c.items}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-emerald-700">{c.items}</span>
+                                                {c.isItemReceived && (
+                                                    <span className="text-xs bg-emerald-100 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200">
+                                                        Received
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-slate-600">{c.startMonth || c.month}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-emerald-600">{targetMonths}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center font-bold text-emerald-500">
