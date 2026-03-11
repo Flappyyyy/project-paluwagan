@@ -5,8 +5,8 @@ const HistoryTable = ({ clients, onSelectClient }) => {
         <div className="bg-white rounded-xl shadow-sm border border-pink-200 overflow-hidden">
             <div className="p-6 border-b border-pink-200 flex justify-between items-center bg-white">
                 <div>
-                    <h2 className="text-lg font-bold text-rose-800">Client Payment History</h2>
-                    <p className="text-sm text-pink-500 mt-1">Overview of total progress and target months.</p>
+                    <h2 className="text-lg font-bold text-rose-800">Completed Accounts Archive</h2>
+                    <p className="text-sm text-pink-500 mt-1">Permanent record of clients who have fully finished their payment plans.</p>
                 </div>
             </div>
             <div className="overflow-x-auto">

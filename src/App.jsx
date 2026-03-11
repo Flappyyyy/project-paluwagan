@@ -111,6 +111,9 @@ function App() {
 
   const filteredHistoryClients = useMemo(() => {
     return clients.filter(client => {
+      // Strictly only show completed/archived clients here
+      if (client.status !== 'Completed') return false;
+
       const matchesSearch = client.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesMonth = monthFilter === 'All Months' || client.month === monthFilter;
       return matchesSearch && matchesMonth;
