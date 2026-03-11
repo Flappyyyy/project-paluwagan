@@ -43,13 +43,17 @@ function App() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedClientHistory, setSelectedClientHistory] = useState(null);
 
-  // Dashboard row selection
+  // Dashboard & Logs row selection
   const [selectedDashboardClientId, setSelectedDashboardClientId] = useState(null);
   const [selectedLogId, setSelectedLogId] = useState(null);
+  const [selectedHistoryIds, setSelectedHistoryIds] = useState([]);
 
   // Log Delete Modal state
   const [isDeleteLogModalOpen, setIsDeleteLogModalOpen] = useState(false);
   const [logToDelete, setLogToDelete] = useState(null);
+
+  // History Delete Modal state
+  const [isDeleteHistoryModalOpen, setIsDeleteHistoryModalOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -298,6 +302,36 @@ function App() {
     }
   };
 
+  // Multiple selection for History
+  const handleSelectHistoryRow = (id) => {
+    setSelectedHistoryIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllHistory = (ids, isSelected) => {
+    if (isSelected) {
+      const newIds = new Set([...selectedHistoryIds, ...ids]);
+      setSelectedHistoryIds(Array.from(newIds));
+    } else {
+      setSelectedHistoryIds(prev => prev.filter(id => !ids.includes(id)));
+    }
+  };
+
+  const handleDeleteHistoryRequest = () => {
+    setIsDeleteHistoryModalOpen(true);
+  };
+
+  const handleConfirmDeleteHistory = async () => {
+    if (selectedHistoryIds.length > 0) {
+      setClients(prev => prev.filter(c => !selectedHistoryIds.includes(c.id)));
+      setIsDeleteHistoryModalOpen(false);
+
+      await supabase.from('clients').delete().in('id', selectedHistoryIds);
+      setSelectedHistoryIds([]);
+    }
+  };
+
   const handleDeleteLogRequest = (log) => {
     setLogToDelete(log);
     setIsDeleteLogModalOpen(true);
@@ -460,8 +494,16 @@ function App() {
                 setMonthFilter={setMonthFilter}
                 onExport={handleExportCSV}
                 showAddButton={false}
+                showEditButton={false}
+                selectedDashboardClient={selectedHistoryIds.length > 0}
+                onDeleteDashboardClient={handleDeleteHistoryRequest}
               />
-              <HistoryTable clients={filteredHistoryClients} />
+              <HistoryTable
+                clients={filteredHistoryClients}
+                selectedIds={selectedHistoryIds}
+                onSelectRow={handleSelectHistoryRow}
+                onSelectAll={handleSelectAllHistory}
+              />
             </div>
           ) : (
             <div className="max-w-7xl mx-auto space-y-6">
@@ -505,6 +547,13 @@ function App() {
         onClose={() => setIsDeleteLogModalOpen(false)}
         onConfirm={handleConfirmDeleteLog}
         clientName={`log for ${logToDelete?.client_name}`}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteHistoryModalOpen}
+        onClose={() => setIsDeleteHistoryModalOpen(false)}
+        onConfirm={handleConfirmDeleteHistory}
+        clientName={`${selectedHistoryIds.length} selected history record(s)`}
       />
 
       <ClientDetailsModal
