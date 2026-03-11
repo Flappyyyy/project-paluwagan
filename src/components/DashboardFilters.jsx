@@ -10,7 +10,8 @@ const DashboardFilters = ({
     onExport,
     selectedDashboardClient,
     onEditDashboardClient,
-    onDeleteDashboardClient
+    onDeleteDashboardClient,
+    showAddButton = true
 }) => {
     const months = [
         "All Months", "January", "February", "March", "April", "May", "June",
@@ -75,13 +76,15 @@ const DashboardFilters = ({
                     <FileDown className="h-4 w-4" />
                     Export CSV
                 </button>
-                <button
-                    onClick={onAddClient}
-                    className="flex items-center gap-2 px-4 py-2 bg-rose-400 text-white rounded-lg text-sm font-medium hover:bg-rose-500 transition-colors shadow-sm"
-                >
-                    <Plus className="h-4 w-4" />
-                    Add Client
-                </button>
+                {showAddButton && (
+                    <button
+                        onClick={onAddClient}
+                        className="flex items-center gap-2 px-4 py-2 bg-rose-400 text-white rounded-lg text-sm font-medium hover:bg-rose-500 transition-colors shadow-sm"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Add Client
+                    </button>
+                )}
             </div>
         </div>
     );

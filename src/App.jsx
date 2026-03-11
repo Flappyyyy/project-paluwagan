@@ -104,6 +104,22 @@ function App() {
     });
   }, [clients, searchTerm, monthFilter]);
 
+  const filteredHistoryClients = useMemo(() => {
+    return clients.filter(client => {
+      const matchesSearch = client.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesMonth = monthFilter === 'All Months' || client.month === monthFilter;
+      return matchesSearch && matchesMonth;
+    });
+  }, [clients, searchTerm, monthFilter]);
+
+  const filteredPaymentLogs = useMemo(() => {
+    return paymentLogs.filter(log => {
+      const matchesSearch = log.client_name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesMonth = monthFilter === 'All Months' || log.month_paid_for === monthFilter;
+      return matchesSearch && matchesMonth;
+    });
+  }, [paymentLogs, searchTerm, monthFilter]);
+
   // Handlers for toggling payments
   const handleTogglePayment15 = async (clientId) => {
     const client = clients.find(c => c.id === clientId);
@@ -389,15 +405,31 @@ function App() {
               />
             </div>
           ) : activeTab === 'history' ? (
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto space-y-6">
+              <DashboardFilters
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                monthFilter={monthFilter}
+                setMonthFilter={setMonthFilter}
+                onExport={handleExportCSV}
+                showAddButton={false}
+              />
               <HistoryTable
-                clients={clients}
+                clients={filteredHistoryClients}
                 onSelectClient={handleSelectClientHistory}
               />
             </div>
           ) : (
-            <div className="max-w-7xl mx-auto">
-              <PaymentLogsTable logs={paymentLogs} />
+            <div className="max-w-7xl mx-auto space-y-6">
+              <DashboardFilters
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                monthFilter={monthFilter}
+                setMonthFilter={setMonthFilter}
+                onExport={handleExportCSV}
+                showAddButton={false}
+              />
+              <PaymentLogsTable logs={filteredPaymentLogs} />
             </div>
           )}
         </main>
