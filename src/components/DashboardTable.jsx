@@ -54,13 +54,19 @@ const DashboardTable = ({
                                     <td className="px-6 py-4 whitespace-nowrap text-center">
                                         <div className="flex items-center justify-center gap-2">
                                             <span>{client.items}</span>
-                                            <input
-                                                type="checkbox"
-                                                checked={client.isItemReceived || false}
-                                                onChange={() => onToggleItemReceived(client.id)}
-                                                className="w-4 h-4 text-rose-500 rounded focus:ring-rose-500 cursor-pointer accent-rose-500"
-                                                title="Mark as received"
-                                            />
+                                            {client.isItemReceived ? (
+                                                <span className="text-xs bg-emerald-100 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200">
+                                                    Received
+                                                </span>
+                                            ) : (
+                                                <input
+                                                    type="checkbox"
+                                                    checked={false}
+                                                    onChange={() => onToggleItemReceived(client.id)}
+                                                    className="w-4 h-4 text-rose-500 rounded border-pink-300 focus:ring-rose-500 cursor-pointer accent-rose-500"
+                                                    title="Mark as received"
+                                                />
+                                            )}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center text-pink-500">{client.month}</td>
